@@ -1,7 +1,4 @@
-import User from '@/models/user';
-import Bank from '@/models/bank';
-import { BankAccountId, UserId } from '@/types/Common';
-import GlobalRegistry from '@/services/GlobalRegistry';
+import { User, Bank, GlobalRegistry, BankAccountId, UserId } from '../../index';
 
 export interface TestFixtures {
   alice: User;
@@ -49,4 +46,4 @@ export class TestFactory {
   static createUser(name: string, accountIds: BankAccountId[]): User {
     return User.create(name, accountIds);
   }
-} 
+}
