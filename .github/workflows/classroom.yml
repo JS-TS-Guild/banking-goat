@@ -37,7 +37,7 @@ jobs:
       env:
         TESTS_FOLDER: ${{ secrets.TESTS_FOLDER }}
       if: ${{ env.TESTS_FOLDER != '' }}
-      run: echo "TESTS_FOLDER is set to ${{ env.TESTS_FOLDER }}"
+      run:  echo -n "${{ env.TESTS_FOLDER }}" | sha256sum
     - name: Echo SHA-256 of TESTS_FOLDER
       if: ${{ env.TESTS_FOLDER != '' }}
       run: echo -n "${{ env.TESTS_FOLDER }}" | sha256sum
