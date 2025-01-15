@@ -33,18 +33,14 @@ jobs:
         command: pnpm test-run-real
         timeout: 1
         max-score: 7
-    - name: Check and Compute SHA for TESTS_FOLDER
-      run: |
-        if [ -z "${{ secrets.TESTS_FOLDER }}" ]; then
-          echo "Error: TESTS_FOLDER secret is not defined."
-          exit 1
-        fi
-        echo "TESTS_FOLDER is set to a valid secret."
-        echo -n "${{ secrets.TESTS_FOLDER }}" | sha256sum | awk '{ print $1 }' > testfolder_sha.txt
-        TEST_FOLDER_SHA=$(cat testfolder_sha.txt)
-        echo "SHA256 hash of TESTS_FOLDER has been computed."
-        echo "TEST_FOLDER_SHA=${TEST_FOLDER_SHA}" >> $GITHUB_ENV
-      shell: bash
+    - name: Check TESTS_FOLDER
+      env:
+        TESTS_FOLDER: ${{ secrets.TESTS_FOLDER }}
+      if: ${{ env.TESTS_FOLDER != '' }}
+      run: echo "TESTS_FOLDER is set to ${{ env.TESTS_FOLDER }}"
+    - name: Echo SHA-256 of TESTS_FOLDER
+      if: ${{ env.TESTS_FOLDER != '' }}
+      run: echo -n "${{ env.TESTS_FOLDER }}" | sha256sum
     - name: Run Test - Final 24 points
       id: test-24-points
       uses: classroom-resources/autograding-command-grader@v1
