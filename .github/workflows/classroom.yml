@@ -33,9 +33,12 @@ jobs:
         command: pnpm test-run-real
         timeout: 1
         max-score: 7
-    - name: Check TESTS_FOLDER and Compute SHA
-      if: ${{ secrets.TESTS_FOLDER != '' }}
+    - name: Check and Compute SHA for TESTS_FOLDER
       run: |
+        if [ -z "${{ secrets.TESTS_FOLDER }}" ]; then
+          echo "Error: TESTS_FOLDER secret is not defined."
+          exit 1
+        fi
         echo "TESTS_FOLDER is set to a valid secret."
         echo -n "${{ secrets.TESTS_FOLDER }}" | sha256sum | awk '{ print $1 }' > testfolder_sha.txt
         TEST_FOLDER_SHA=$(cat testfolder_sha.txt)
